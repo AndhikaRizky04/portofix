@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,400..900&family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-ink-900:    #0E110E;  /* dasar. hitam ber-cast olive, seperti casing anodized. BUKAN #000 */
+  --color-ink-800:    #151A15;  /* section selang-seling */
+  --color-ink-700:    #1E241D;  /* permukaan card */
+  --color-line:       #2C3529;  /* hairline: grid, border, tick mark */
+  --color-phosphor:   #F2A93B;  /* AMBER — aksen utama, dipakai HEMAT */
+  --color-phosphor-d: #8A6224;  /* amber redup, state non-aktif */
+  --color-steel:      #7C97A6;  /* aksen sekunder: label, garis data, tautan */
+  --color-bone:       #E7E4DA;  /* teks utama */
+  --color-mute:       #9AA294;  /* teks sekunder */
+  --color-alert:      #D64545;  /* HANYA semantik risiko nyata, bukan dekorasi */
+
+  --font-display: "Archivo", sans-serif;
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-ink-900);
+    color: var(--color-bone);
+    scroll-behavior: auto; /* Handled by Lenis */
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--color-ink-900);
+    color: var(--color-bone);
+    min-height: 100vh;
+  }
+
+  /* Archivo Expanded utility font config */
+  .font-display {
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  /* Technical label configuration */
+  .label-mono {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .font-mono-tech {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+  }
+
+  /* Hairlines and grids styling */
+  .border-hairline {
+    border: 1px solid var(--color-line);
+  }
+  
+  .border-hairline-t {
+    border-top: 1px solid var(--color-line);
+  }
+  
+  .border-hairline-b {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .border-hairline-l {
+    border-left: 1px solid var(--color-line);
+  }
+
+  .border-hairline-r {
+    border-right: 1px solid var(--color-line);
+  }
+
+  /* Background grid overlay styling */
+  .bg-grid-blueprint {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(44, 53, 41, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(44, 53, 41, 0.05) 1px, transparent 1px);
+  }
+
+  /* Custom focus ring styling */
+  .focus-ring-amber {
+    outline: none;
+    transition: outline-color 0.15s ease-in-out;
+  }
+  .focus-ring-amber:focus-visible {
+    outline: 2px solid var(--color-phosphor);
+    outline-offset: 2px;
+  }
+
+  /* Selection styling */
+  ::selection {
+    background-color: var(--color-phosphor);
+    color: var(--color-ink-900);
+  }
+
+  /* Scrollbar override */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-900);
+    border-left: 1px solid var(--color-line);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+    border-radius: 0px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-phosphor-d);
+  }
+}
+
+/* Duotone image filter */
+.duotone-filter {
+  filter: grayscale(100%) contrast(120%) brightness(90%);
+  mix-blend-mode: luminosity;
+  transition: filter 0.4s ease, mix-blend-mode 0.4s ease;
+}
+
+.duotone-filter:hover {
+  filter: none;
+  mix-blend-mode: normal;
+}
+
+/* Animations */
+@keyframes pulse-amber {
+  0%, 100% {
+    opacity: 0.3;
+    box-shadow: 0 0 4px var(--color-phosphor-d);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 10px var(--color-phosphor);
+  }
+}
+
+.led-blink-amber {
+  animation: pulse-amber 2s infinite ease-in-out;
+}
+
+/* StarBorder Custom Style (used specifically for Download CV Button) */
+.star-border-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--color-ink-800);
+  border: 1px solid var(--color-line);
+  transition: all 0.3s ease;
+}
+
+.star-border-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent, 
+    transparent, 
+    var(--color-phosphor) 25%, 
+    transparent 50%
+  );
+  animation: rotate-conic 4s linear infinite;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+@keyframes rotate-conic {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.star-border-btn-inner {
+  position: relative;
+  z-index: 2;
+  background: var(--color-ink-900);
+  margin: 1px;
+  height: calc(100% - 2px);
+  width: calc(100% - 2px);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Smooth transition utility */
+.transition-standard {
+  transition: all 300ms cubic-bezier(.22,1,.36,1);
+}
+.transition-micro {
+  transition: all 150ms cubic-bezier(.22,1,.36,1);
+}
+.transition-reveal {
+  transition: all 600ms cubic-bezier(.22,1,.36,1);
+}
+
+@keyframes border-blink {
+  0%, 100% {
+    border-color: var(--color-line);
+    box-shadow: none;
+  }
+  50% {
+    border-color: var(--color-phosphor);
+    box-shadow: 0 0 10px rgba(242, 169, 59, 0.25);
+  }
+}
+
+.blink-amber-border {
+  animation: border-blink 1.2s cubic-bezier(.22,1,.36,1) 2;
+}
+
