@@ -2,14 +2,14 @@ export interface GalleryItem {
   src: string;
   alt: string;
   caption: string;
-  kegiatan: 'Pengembangan' | 'Kolaborasi' | 'Monitoring' | 'Pengujian';
+  kegiatan: 'Pengembangan' | 'Kolaborasi' | 'Divisi HR' | 'Pelatihan';
   w: number;
   h: number;
 }
 
 export const galleryItems: GalleryItem[] = [
   {
-    src: '/img/documentation/magang-1.webp',
+    src: '/assets/5.jpeg',
     alt: 'Pengembangan Tracking System di PT Pura Barutama',
     caption: 'Proses pengodean modul tracking menggunakan framework ASP.NET di lingkungan kerja Unit Offset.',
     kegiatan: 'Pengembangan',
@@ -17,31 +17,31 @@ export const galleryItems: GalleryItem[] = [
     h: 533
   },
   {
-    src: '/img/documentation/magang-2.webp',
-    alt: 'Diskusi Teknis Database Oracle',
-    caption: 'Koordinasi dengan tim IT internal mengenai perancangan skema relasional Oracle Database.',
+    src: '/assets/2.jpeg',
+    alt: 'Pengerjaan Administrasi Kantor',
+    caption: 'Membantu Staff HR dalam mengelola data karyawan.',
     kegiatan: 'Kolaborasi',
     w: 600,
     h: 800
   },
   {
-    src: '/img/documentation/magang-3.webp',
-    alt: 'Monitoring Alur Produksi Offset',
-    caption: 'Penerapan panel dashboard monitoring telemetri alur produksi kertas dan cetakan.',
-    kegiatan: 'Monitoring',
+    src: '/assets/4.jpeg',
+    alt: 'Foto Bersama',
+    caption: 'Foto Bersama dengan para staff HR PT. Pura Offset',
+    kegiatan: 'Divisi HR',
     w: 800,
     h: 600
   },
   {
-    src: '/img/documentation/magang-4.webp',
-    alt: 'Uji Coba Lapangan Sistem Tracking',
-    caption: 'Uji coba pemindaian kode produk untuk sinkronisasi status pelacakan real-time.',
-    kegiatan: 'Pengujian',
+    src: '/assets/6.jpeg',
+    alt: 'Pelatihan Bersama Karyawan',
+    caption: 'Pelatihan Pengendalian Bahaya Sumber Energi Listrik Dengan LOTO',
+    kegiatan: 'Pelatihan',
     w: 700,
     h: 500
   },
   {
-    src: '/img/documentation/magang-5.webp',
+    src: '/assets/1.jpeg',
     alt: 'Presentasi Hasil Magang',
     caption: 'Pemaparan aplikasi tracking produksi di depan manajer unit offset PT. Pura Barutama.',
     kegiatan: 'Kolaborasi',
@@ -49,10 +49,10 @@ export const galleryItems: GalleryItem[] = [
     h: 533
   },
   {
-    src: '/img/documentation/magang-6.webp',
-    alt: 'Debugging Integrasi API',
-    caption: 'Melakukan pelacakan log error integrasi data transaksi dari mesin produksi.',
-    kegiatan: 'Pengembangan',
+    src: '/assets/3.jpeg',
+    alt: 'Pelatihan K3 PT. Pura Offset',
+    caption: 'Melakukan pelatihan K3 yang diadakan rutin oleh perusahaan',
+    kegiatan: 'Pelatihan',
     w: 600,
     h: 900
   }
