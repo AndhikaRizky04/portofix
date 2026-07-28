@@ -45,5 +45,5 @@ export const profile: Profile = {
     koordinat: "KALIWUNGU, KUDUS"
   },
   cvPath: '/cv/CV-Andhika-Rizky-Nur-Wahyu.pdf',
-  fotoPath: '/src/assets/profile.jpeg'
+  fotoPath: 'assets/profile.jpeg'
 };
