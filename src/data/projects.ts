@@ -22,7 +22,7 @@ export const projects: Project[] = [
     deskripsi: 'Memprediksi risiko stunting pada balita menggunakan algoritma CatBoost dan XGBoost berdasarkan data antropometri.',
     demo: 'https://stuntingpredictionupdate-e77sn7h3uhz88ufn5zckdq.streamlit.app/',
     notebook: 'https://github.com/AndhikaRizky04/Stunting_prediction_fix/blob/main/Prediksi_Stunting_Final_2.ipynb',
-    gambar: '/src/assets/banner/prediksi.png',
+    gambar: '/assets/banner/prediksi.png',
     unggulan: true
   },
   {
@@ -33,7 +33,7 @@ export const projects: Project[] = [
     stack: ['ASP.NET', 'Oracle Database'],
     deskripsi: 'Mengembangkan aplikasi pelacakan alur produksi pabrik secara real-time terintegrasi database Oracle.',
     github: 'https://github.com/AndhikaRizky04/login',
-    gambar: '/src/assets/banner/track.png',
+    gambar: '/assets/banner/track.png',
     unggulan: true
   },
   {
@@ -45,7 +45,7 @@ export const projects: Project[] = [
     deskripsi: 'Platform katalog produk interaktif dengan performa optimal dan manajemen API dinamis.',
     demo: 'https://web-porto-eight-omega.vercel.app/',
     github: 'https://github.com/AndhikaRizky04/web-porto',
-    gambar: '/src/assets/banner/catalog.png',
+    gambar: '/assets/banner/catalog.png',
     unggulan: true
   },
   {
@@ -57,7 +57,7 @@ export const projects: Project[] = [
     deskripsi: 'Dashboard analisis hasil belajar berbasis AI untuk rekomendasi materi pengajaran adaptif.',
     demo: 'https://ai-learning-insight-tau.vercel.app/',
     github: 'https://github.com/AI-Learning-Insight-A25-CS226/AI-Learning-Insight',
-    gambar: '/src/assets/banner/ai.png',
+    gambar: '/assets/banner/ai.png',
     unggulan: true
   },
   {
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     stack: ['Laravel 12'],
     deskripsi: 'Sistem manajemen tiket gangguan layanan publik berbasis antrean terstruktur.',
     github: 'https://github.com/AndhikaRizky04/Web-TicketingApp',
-    gambar: '/src/assets/banner/tiket.png'
+    gambar: '/assets/banner/tiket.png'
   },
   {
     id: 'website-poliklinik',
@@ -78,7 +78,7 @@ export const projects: Project[] = [
     stack: ['Laravel 12'],
     deskripsi: 'Aplikasi administrasi pasien rawat jalan terintegrasi rekam medis poliklinik.',
     github: 'https://github.com/AndhikaRizky04/projectBengkod',
-    gambar: '/src/assets/banner/laravel.jpg'
+    gambar: '/assets/banner/laravel.jpg'
   },
   {
     id: 'website-banking',
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     stack: ['React JS'],
     deskripsi: 'Dashboard perbankan dengan visualisasi transaksi dinamis dan antarmuka responsif.',
     github: 'https://github.com/AndhikaRizky04/admin-ui',
-    gambar: '/src/assets/banner/bank.png'
+    gambar: '/assets/banner/bank.png'
   },
   {
     id: 'android-review-film',
@@ -98,7 +98,7 @@ export const projects: Project[] = [
     stack: ['Java'],
     deskripsi: 'Aplikasi mobile katalog review film dengan fitur pencarian dan penyimpanan lokal.',
     github: 'https://github.com/AndhikaRizky4/Dhika11RPL012019',
-    gambar: '/src/assets/banner/flut.webp'
+    gambar: '/assets/banner/flut.webp'
   },
   {
     id: 'android-penjualan-umkm',
@@ -108,7 +108,7 @@ export const projects: Project[] = [
     stack: ['Flutter'],
     deskripsi: 'Aplikasi pencatatan transaksi kasir digital dan laporan penjualan harian UMKM.',
     github: 'https://github.com/AndhikaRizky04/Aplikasi-UMKM-Flutter',
-    gambar: '/src/assets/banner/flut.webp'
+    gambar: '/assets/banner/flut.webp'
   },
   {
     id: 'game-coin',
@@ -118,6 +118,6 @@ export const projects: Project[] = [
     stack: ['C#'],
     deskripsi: 'Game 2D platformer bertema pengumpulan koin dengan fisika mekanik buatan sendiri.',
     github: 'https://github.com/AndhikaRizky4/PTSGame',
-    gambar: '/src/assets/banner/c.jpg'
+    gambar: '/assets/banner/c.jpg'
   }
 ];
