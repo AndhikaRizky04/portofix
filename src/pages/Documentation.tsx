@@ -10,7 +10,7 @@ export const Documentation: React.FC = () => {
   const [selectedActivity, setSelectedActivity] = useState<string>('SEMUA');
   const [activeImgIndex, setActiveImgIndex] = useState<number | null>(null);
 
-  const activities = ['SEMUA', 'PENGEMBANGAN', 'KOLABORASI', 'MONITORING', 'PENGUJIAN'];
+  const activities = ['SEMUA', 'PENGEMBANGAN', 'KOLABORASI', 'DIVISI HR', 'PELATIHAN'];
 
   const filteredItems = selectedActivity === 'SEMUA'
     ? galleryItems
