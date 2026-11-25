@@ -29,7 +29,7 @@ export const Certifications: React.FC = () => {
     <section id="sertifikasi" className="mx-auto max-w-[1240px] px-6 pt-20 md:pt-24 scroll-mt-28">
       <SectionHeader title="Sertifikasi & Lisensi" eyebrow={`${certifications.length} sertifikat`} />
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {certifications.map((cert, idx) => {
           const isBnsp = cert.nama.toLowerCase().includes('bnsp');
           return (

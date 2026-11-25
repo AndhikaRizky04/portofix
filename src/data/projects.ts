@@ -10,9 +10,23 @@ export interface Project {
   notebook?: string;
   gambar: string;
   unggulan?: boolean;
+  /** Kartu sorotan: 2 kolom × 2 baris di grid bento (tampilan "Semua"). */
+  sorotan?: boolean;
 }
 
 export const projects: Project[] = [
+  {
+    id: 'website-desa-lerep',
+    nama: 'Website Pelayanan Publik Desa Lerep',
+    kategori: 'Full Stack',
+    tahun: '2026',
+    stack: ['Go', 'React TSX', 'Supabase'],
+    deskripsi: 'Portal resmi Desa Wisata Lerep, Ungaran Barat, Kab. Semarang — profil desa, PPID, transparansi, produk hukum, pelayanan publik, informasi, potensi desa, dan peta desa. Backend Go, frontend React TSX, terintegrasi Supabase.',
+    demo: 'https://lerep.desa.id',
+    gambar: '/assets/banner/lerep.webp',
+    unggulan: true,
+    sorotan: true
+  },
   {
     id: 'stunting-prediction',
     nama: 'Prediksi Risiko Stunting',

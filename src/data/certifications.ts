@@ -23,6 +23,13 @@ export const certifications: Certification[] = [
     gambar: '/assets/sertif/asah.jpg'
   },
   {
+    nama: 'Literasi AI untuk Semua: Kenali, Gunakan, Ciptakan',
+    penerbit: 'BASS Training Centre and Consultant',
+    tanggal: '2 November 2025',
+    nomorSertifikat: 'CERT-1UHCYDQXWH3F',
+    gambar: '/assets/sertif/literasi-ai.jpg'
+  },
+  {
     nama: 'English Proficiency Assessment (CFLT)',
     penerbit: 'Center of Foreign Language Training (CFLT)',
     tanggal: '2025',

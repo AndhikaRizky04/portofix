@@ -3,63 +3,78 @@ import { LayoutGroup, motion, AnimatePresence } from 'framer-motion';
 import SectionHeader from '../ui/SectionHeader';
 import ProjectCard from './ProjectCard';
 import { projects } from '../../data/projects';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { cn } from '../../lib/utils';
+
+const ALL = 'Semua';
 
 export const Portfolio: React.FC = () => {
-  const [selectedKategori, setSelectedKategori] = useState<string>('SEMUA');
+  const [kategori, setKategori] = useState<string>(ALL);
+  const reduced = useReducedMotion();
 
-  const categories = ['SEMUA', ...Array.from(new Set(projects.map((p) => p.kategori.toUpperCase())))];
+  const categories = [ALL, ...Array.from(new Set(projects.map((p) => p.kategori)))];
+  const count = (c: string) => (c === ALL ? projects.length : projects.filter((p) => p.kategori === c).length);
+  const filtered = kategori === ALL ? projects : projects.filter((p) => p.kategori === kategori);
 
-  const filteredProjects =
-    selectedKategori === 'SEMUA'
-      ? projects
-      : projects.filter((p) => p.kategori.toUpperCase() === selectedKategori);
+  // Bento: di tampilan "Semua", proyek unggulan memakan 2 kolom dan berselang-seling kiri/kanan.
+  let featuredSeen = 0;
 
   return (
-    <section id="portofolio" className="mx-auto max-w-[1240px] px-6 pt-20 md:pt-24 scroll-mt-28">
+    <section id="portofolio" className="mx-auto max-w-[1240px] px-4 pt-20 md:px-6 md:pt-24 scroll-mt-28">
       <SectionHeader title="Portofolio Proyek" eyebrow={`${projects.length} proyek · 2023–2026`} />
 
       {/* Filter kategori */}
-      <div className="mb-8 flex flex-wrap items-center gap-2 select-none">
-        {categories.map((cat) => {
-          const isActive = selectedKategori === cat;
+      <div role="tablist" aria-label="Filter kategori proyek" className="no-scrollbar -mx-4 mb-8 flex gap-1.5 overflow-x-auto px-4 select-none sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
+        {categories.map((c) => {
+          const active = kategori === c;
           return (
             <button
-              key={cat}
-              onClick={() => setSelectedKategori(cat)}
-              className={`relative rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors duration-200 cursor-pointer focus-ring ${
-                isActive ? 'text-forest-950' : 'bg-mist text-slate hover:text-forest-900 hover:bg-lime-100'
-              }`}
+              key={c}
+              role="tab"
+              aria-selected={active}
+              onClick={() => setKategori(c)}
+              className={cn(
+                'relative inline-flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-[13px] font-medium transition-colors cursor-pointer focus-ring',
+                active ? 'text-forest-950' : 'bg-mist text-slate hover:bg-lime-100 hover:text-forest-900',
+              )}
             >
-              {isActive && (
+              {active && (
                 <motion.span
-                  layoutId="portfolio-filter-pill"
+                  layoutId="portfolio-filter"
                   className="absolute inset-0 rounded-full bg-lime"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                 />
               )}
-              <span className="relative">{cat}</span>
+              <span className="relative">{c}</span>
+              <span className={cn('relative font-mono text-[11px]', active ? 'text-forest-950/60' : 'text-slate/70')}>
+                {count(c)}
+              </span>
             </button>
           );
         })}
       </div>
 
-      {/* Grid kartu ala "Категории товаров" */}
       <LayoutGroup>
-        <motion.div layout className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <motion.div layout={!reduced} className="grid grid-flow-row-dense grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-5">
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, i) => (
-              <motion.div
-                layout
-                key={project.id}
-                className={project.unggulan && selectedKategori === 'SEMUA' && i < 2 ? 'sm:col-span-2' : ''}
-                initial={{ opacity: 0, y: 24, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.45, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <ProjectCard project={project} wide={!!project.unggulan && selectedKategori === 'SEMUA' && i < 2} />
-              </motion.div>
-            ))}
+            {filtered.map((project, i) => {
+              const featured = kategori === ALL && !!project.unggulan;
+              const alternate = featured && featuredSeen++ % 2 === 1;
+              return (
+                <motion.div
+                  layout={!reduced}
+                  key={project.id}
+                  className={cn(featured && 'sm:col-span-2', featured && project.sorotan && 'lg:row-span-2', alternate && 'lg:col-start-2')}
+                  initial={reduced ? false : { opacity: 0, y: 40, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.6, delay: (i % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ProjectCard project={project} index={projects.indexOf(project)} featured={featured} />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
       </LayoutGroup>

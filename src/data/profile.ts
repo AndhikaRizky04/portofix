@@ -21,6 +21,8 @@ export interface Profile {
   };
   cvPath: string;
   fotoPath: string;
+  /** Avatar 3D berlatar hijau untuk logo navbar & footer. */
+  logoPath: string;
 }
 
 export const profile: Profile = {
@@ -45,5 +47,6 @@ export const profile: Profile = {
     koordinat: "KALIWUNGU, KUDUS"
   },
   cvPath: '/cv/CV-Andhika-Rizky-Nur-Wahyu.pdf',
-  fotoPath: '/assets/profile.jpeg'
+  fotoPath: '/assets/profile-jas.webp',
+  logoPath: '/assets/avatar-logo.webp'
 };

@@ -26,7 +26,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         centered ? 'md:justify-center text-center items-center' : 'md:justify-between'
       }`}
     >
-      <div className={`space-y-3 ${centered ? 'flex flex-col items-center' : ''}`}>
+      <div className={`flex flex-col gap-3 ${centered ? 'items-center' : 'items-start'}`}>
         <span
           className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] select-none ${
             isDark ? 'bg-white/10 text-lime-300' : 'bg-lime-100 text-forest-700'

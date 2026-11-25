@@ -1,156 +1,262 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiArrowUpRight } from 'react-icons/fi';
-import { HiLightningBolt } from 'react-icons/hi';
+import { motion } from 'framer-motion';
+import { FiArrowUpRight, FiGithub, FiLinkedin, FiMessageSquare, FiFileText } from 'react-icons/fi';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
+import { useActiveSection } from '../../hooks/useActiveSection';
+import { navItems } from '../../data/navigation';
+import { profile } from '../../data/profile';
+import { cn, scrollToHash } from '../../lib/utils';
+import { Button } from '../ui/button';
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+
+const sectionIds = ['hero', ...navItems.map((n) => n.hash.slice(1)), 'kontak'];
+
+/** Logo: avatar 3D berlatar hijau. */
+const Monogram: React.FC<{ className?: string }> = ({ className }) => (
+  <img
+    src={profile.logoPath}
+    alt=""
+    aria-hidden="true"
+    width={40}
+    height={40}
+    decoding="async"
+    draggable={false}
+    className={cn('size-10 shrink-0 rounded-xl object-cover ring-1 ring-lime/40', className)}
+  />
+);
 
 export const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  const pendingHash = useRef<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const progress = useScrollProgress();
+  const active = useActiveSection(sectionIds);
   const isDocPage = location.pathname === '/dokumentasi';
 
-  const navItems = [
-    { label: 'Tentang', hash: '#tentang' },
-    { label: 'Pengalaman', hash: '#pengalaman' },
-    { label: 'Portofolio', hash: '#portofolio' },
-    { label: 'Keahlian', hash: '#keahlian' },
-    { label: 'Sertifikasi', hash: '#sertifikasi' },
-  ];
-
+  // Menyusut saat scroll, sembunyi saat scroll turun jauh, muncul lagi saat scroll naik.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      setHidden(y > 480 && y > lastY.current + 4);
+      if (y < lastY.current - 4 || y < 480) setHidden(false);
+      lastY.current = y;
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleNavClick = (hash: string) => {
-    setIsOpen(false);
+  // Hentikan Lenis selama sheet terbuka agar latar tidak ikut bergulir.
+  useEffect(() => {
+    const lenis = (window as any).lenis;
+    if (!lenis) return;
+    if (open) lenis.stop();
+    else lenis.start();
+  }, [open]);
+
+  const go = (hash: string) => {
     if (isDocPage) {
-      navigate('/' + hash);
+      navigate('/' + (hash === '#top' ? '' : hash));
       return;
     }
-    const lenisInstance = (window as any).lenis;
-    if (lenisInstance) {
-      lenisInstance.scrollTo(hash === '#top' ? 0 : hash, { duration: 1.2, offset: -80 });
-    } else if (hash === '#top') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToHash(hash);
+  };
+
+  const goFromSheet = (hash: string) => {
+    pendingHash.current = hash;
+    setOpen(false);
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-40 select-none transition-standard ${
-        scrolled ? 'bg-forest-900/95 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)] backdrop-blur-md' : 'bg-forest-900'
-      }`}
+    <header
+      className={cn(
+        'fixed inset-x-0 top-0 z-40 px-3 pt-3 select-none transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] md:px-6 md:pt-4',
+        hidden && !open && '-translate-y-[130%]',
+      )}
+      onFocusCapture={() => setHidden(false)}
     >
-      {/* Baris info tipis ala referensi */}
-      <div
-        className={`hidden md:block border-b border-white/5 transition-all duration-300 overflow-hidden ${
-          scrolled ? 'max-h-0 opacity-0' : 'max-h-8 opacity-100'
-        }`}
+      <a
+        href="#hero"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-lime focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-forest-950"
       >
-        <div className="max-w-[1240px] mx-auto px-6 h-8 flex items-center justify-between text-[11px] text-white/55">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-lime led-blink-amber" />
-              Tersedia untuk direkrut
-            </span>
-            <span>Kaliwungu, Kudus · Jawa Tengah</span>
-          </div>
-          <a href="mailto:andhikawahyu65@gmail.com" className="hover:text-lime transition-colors">
-            andhikawahyu65@gmail.com
-          </a>
-        </div>
-      </div>
+        Lewati ke konten
+      </a>
 
-      <div className="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between gap-6">
+      <nav
+        aria-label="Navigasi utama"
+        className={cn(
+          'relative mx-auto flex max-w-[1240px] items-center justify-between gap-3 overflow-hidden rounded-2xl pl-2 pr-2 ring-1 transition-[height,background-color,box-shadow] duration-300',
+          scrolled
+            ? 'h-14 bg-forest-950/80 ring-white/10 shadow-[0_18px_40px_-22px_rgba(0,0,0,0.7)] backdrop-blur-xl md:h-[60px]'
+            : 'h-16 bg-forest-950 ring-white/[0.06] md:h-[68px]',
+        )}
+      >
         <Link
           to="/"
-          onClick={() => handleNavClick('#top')}
-          className="group flex items-center gap-2.5 focus-ring rounded-md"
-          aria-label="Beranda"
+          onClick={() => go('#top')}
+          className="group flex min-w-0 items-center gap-3 rounded-xl py-1 pl-1 pr-2 focus-ring"
+          aria-label="Andhika Rizky — kembali ke beranda"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-lime text-forest-950 transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-105">
-            <HiLightningBolt size={20} />
-          </span>
-          <span className="font-display text-[13px] leading-[1.05] text-white">
-            ANDHIKA
-            <br />
-            <span className="text-lime">RIZKY</span>
-          </span>
+          <Monogram className="transition-transform duration-300 group-hover:-rotate-6" />
+          <span className="hidden truncate text-[15px] font-semibold tracking-tight text-white sm:block">Andhika Rizky</span>
         </Link>
 
-        {/* Navigasi desktop */}
-        <div className="hidden lg:flex items-center gap-1 rounded-full bg-white/5 p-1">
-          {navItems.map((item) => (
-            <button
-              key={item.hash}
-              onClick={() => handleNavClick(item.hash)}
-              className="rounded-full px-4 py-2 text-[13px] font-medium text-white/75 hover:text-forest-950 hover:bg-lime transition-colors duration-200 cursor-pointer focus-ring"
+        {/* Navigasi desktop dengan penanda section aktif yang meluncur */}
+        <ul className="hidden items-center gap-0.5 lg:flex">
+          {navItems.map((item) => {
+            const isActive = !isDocPage && active === item.hash.slice(1);
+            return (
+              <li key={item.hash}>
+                <button
+                  onClick={() => go(item.hash)}
+                  aria-current={isActive ? 'true' : undefined}
+                  className={cn(
+                    'relative flex h-10 items-center rounded-xl px-4 text-[13px] font-medium transition-colors cursor-pointer focus-ring',
+                    isActive ? 'text-forest-950' : 'text-white/70 hover:text-white',
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 rounded-xl bg-lime"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">{item.label}</span>
+                </button>
+              </li>
+            );
+          })}
+          <li>
+            <Link
+              to="/dokumentasi"
+              aria-current={isDocPage ? 'page' : undefined}
+              className={cn(
+                'flex h-10 items-center rounded-xl px-3.5 text-[13px] font-medium transition-colors focus-ring',
+                isDocPage ? 'bg-lime text-forest-950' : 'text-white/70 hover:text-white',
+              )}
             >
-              {item.label}
-            </button>
-          ))}
-          <Link
-            to="/dokumentasi"
-            className={`rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-200 focus-ring ${
-              isDocPage ? 'bg-lime text-forest-950' : 'text-white/75 hover:text-forest-950 hover:bg-lime'
-            }`}
-          >
-            Dokumentasi
-          </Link>
+              Dokumentasi
+            </Link>
+          </li>
+        </ul>
+
+        <div className="flex items-center gap-2">
+          <Button onClick={() => go('#kontak')} className="hidden md:inline-flex" size="sm">
+            Hubungi Saya <FiArrowUpRight />
+          </Button>
+
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="group grid size-11 place-items-center rounded-xl bg-white/[0.07] transition-colors hover:bg-lime focus-ring cursor-pointer lg:hidden"
+                aria-label="Buka menu navigasi"
+              >
+                <span className="flex w-5 flex-col items-end gap-[5px]" aria-hidden="true">
+                  <span className="h-0.5 w-5 rounded-full bg-white transition-colors group-hover:bg-forest-950" />
+                  <span className="h-0.5 w-3.5 rounded-full bg-lime transition-all group-hover:w-5 group-hover:bg-forest-950" />
+                </span>
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              onCloseAutoFocus={(e) => {
+                const hash = pendingHash.current;
+                if (!hash) return;
+                pendingHash.current = null;
+                e.preventDefault();
+                go(hash);
+              }}
+            >
+              <SheetHeader className="border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <Monogram />
+                  <div>
+                    <SheetTitle>Andhika Rizky</SheetTitle>
+                    <SheetDescription>Navigasi portofolio</SheetDescription>
+                  </div>
+                </div>
+              </SheetHeader>
+
+              <nav aria-label="Navigasi seluler" className="flex-1 overflow-y-auto px-4 py-4">
+                <ul className="flex flex-col">
+                  {[...navItems, { label: 'Kontak', hash: '#kontak' }].map((item) => {
+                    const isActive = !isDocPage && active === item.hash.slice(1);
+                    return (
+                      <li key={item.hash}>
+                        <button
+                          onClick={() => goFromSheet(item.hash)}
+                          aria-current={isActive ? 'true' : undefined}
+                          className={cn(
+                            'group flex w-full items-center rounded-xl px-3 py-3 text-left transition-colors cursor-pointer focus-ring',
+                            isActive ? 'bg-lime/10' : 'hover:bg-white/[0.05]',
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              'text-xl font-semibold tracking-tight transition-colors',
+                              isActive ? 'text-lime' : 'text-white group-hover:text-lime-300',
+                            )}
+                          >
+                            {item.label}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Link
+                  to="/dokumentasi"
+                  onClick={() => setOpen(false)}
+                  className="mt-3 flex items-center justify-between rounded-xl border border-white/10 px-4 py-3.5 text-sm font-medium text-white/80 transition-colors hover:border-lime/50 hover:text-lime-300 focus-ring"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <FiFileText className="text-lime" /> Dokumentasi Magang
+                  </span>
+                  <FiArrowUpRight />
+                </Link>
+              </nav>
+
+              <SheetFooter className="border-t border-white/10">
+                <span className="flex items-center gap-2 text-xs text-white/60">
+                  <span className="size-1.5 rounded-full bg-lime led-blink-amber" /> Terbuka untuk peluang kerja
+                </span>
+                <div className="flex gap-2">
+                  {[
+                    { href: profile.kontak.github, label: 'GitHub', icon: <FiGithub /> },
+                    { href: profile.kontak.linkedin, label: 'LinkedIn', icon: <FiLinkedin /> },
+                    { href: `https://wa.me/${profile.kontak.whatsapp}`, label: 'WhatsApp', icon: <FiMessageSquare /> },
+                  ].map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="grid size-11 place-items-center rounded-xl bg-white/[0.06] text-white/80 transition-colors hover:bg-lime hover:text-forest-950 focus-ring"
+                    >
+                      {s.icon}
+                    </a>
+                  ))}
+                </div>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </div>
 
-        <button
-          onClick={() => handleNavClick('#kontak')}
-          className="hidden lg:inline-flex btn-lime items-center gap-1.5 rounded-full px-5 py-2.5 text-[13px] font-bold cursor-pointer focus-ring"
-        >
-          Hubungi Saya <FiArrowUpRight />
-        </button>
-
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden grid h-10 w-10 place-items-center rounded-lg bg-white/10 text-white hover:bg-lime hover:text-forest-950 transition-colors focus-ring"
-          aria-label="Buka menu"
-          aria-expanded={isOpen}
-        >
-          {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-        </button>
-      </div>
-
-      {/* Progres scroll */}
-      <div className="h-[3px] w-full bg-white/5">
-        <div className="h-full bg-lime transition-[width] duration-100" style={{ width: `${progress}%` }} />
-      </div>
-
-      {/* Drawer mobile */}
-      {isOpen && (
-        <div className="lg:hidden bg-forest-900 border-t border-white/10 px-6 py-5 flex flex-col gap-2">
-          {[...navItems, { label: 'Kontak', hash: '#kontak' }].map((item) => (
-            <button
-              key={item.hash}
-              onClick={() => handleNavClick(item.hash)}
-              className="text-left rounded-lg px-3 py-2.5 text-sm font-medium text-white/80 hover:bg-lime hover:text-forest-950 transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
-          <Link
-            to="/dokumentasi"
-            onClick={() => setIsOpen(false)}
-            className="mt-2 btn-lime rounded-lg px-3 py-2.5 text-center text-sm font-bold"
-          >
-            Dokumentasi Magang
-          </Link>
-        </div>
-      )}
-    </nav>
+        {/* Progres scroll — garis tipis di dasar pill */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 left-0 h-[2px] origin-left bg-lime"
+          style={{ width: '100%', transform: `scaleX(${progress / 100})` }}
+        />
+      </nav>
+    </header>
   );
 };
 export default Navbar;

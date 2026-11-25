@@ -89,6 +89,10 @@ export const About: React.FC = () => {
               Software engineer — dari logika backend ke <span className="text-lime">dampak nyata</span>
             </h3>
 
+            <p className="border-l-2 border-lime pl-4 text-base leading-relaxed text-ink md:text-[17px]">
+              {profile.deskripsi}
+            </p>
+
             <p className="text-[15px] leading-relaxed text-slate">
               Perjalanan saya di dunia rekayasa perangkat lunak dimulai sejak tahun 2019 di{' '}
               <Tag>SMK Raden Umar Said Kudus</Tag>, mengambil spesialisasi Rekayasa Perangkat Lunak. Selama masa studi

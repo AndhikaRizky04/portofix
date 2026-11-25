@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Anton&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -18,6 +18,7 @@
   --color-ink:        #0F2217;  /* teks utama di area terang */
   --color-slate:      #56675C;  /* teks sekunder di area terang */
   --color-rule:       #DFE6DB;  /* garis di area terang */
+  --color-hero-word:  #E3EFCB;  /* krem kehijauan untuk kata besar hero */
 
   /* ===== Token lama (dipakai Dokumentasi, CV viewer, Lightbox) — dipetakan ulang ke hijau gelap ===== */
   --color-ink-900:    #061C0E;
@@ -228,3 +229,89 @@
   .bg-doodle,
   .bg-doodle-lime { background-size: 340px auto; }
 }
+
+/* ===== Hero poster: kata besar tembus foto ===== */
+.hero-bg {
+  --hero-fs: clamp(5.25rem, 26vw, 20rem);
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 38%, rgba(31, 122, 58, 0.35), transparent 70%),
+    var(--color-forest-950);
+}
+.hero-word {
+  font-family: 'Anton', var(--font-display);
+  font-size: var(--hero-fs);
+  line-height: 0.82;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (min-width: 768px) {
+  .hero-bg { --hero-fs: clamp(5.25rem, 23vw, 20rem); }
+}
+/* Nama lengkap: lebar ~60% kata besar, menempel di bawahnya */
+.hero-fullname {
+  /* HP & tablet: di area kemeja agar tidak menutupi wajah */
+  top: 68%;
+  width: min(82%, 560px);
+}
+@media (min-width: 1024px) {
+  .hero-fullname {
+    top: calc(43% + var(--hero-fs) * 0.46);
+    width: min(calc(var(--hero-fs) * 2), 88%);
+  }
+}
+.hero-fullname__text .stroke-text__svg { max-width: none; }
+.hero-word--solid { color: var(--color-hero-word); }
+.hero-word--outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-hero-word);
+}
+.hero-photo {
+  /* Tepi samping & bawah sudah dipudarkan di file foto; ini hanya pengaman tipis di dasar */
+  -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+}
+
+/* ===== Sheet (shadcn) — animasi masuk/keluar berbasis data-state Radix ===== */
+@keyframes sheet-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes sheet-out-right { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes sheet-in-left { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes sheet-out-left { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+.sheet-overlay[data-state='open'] { animation: fade-in 0.3s ease-out; }
+.sheet-overlay[data-state='closed'] { animation: fade-out 0.2s ease-in forwards; }
+.sheet-content[data-side='right'][data-state='open'] { animation: sheet-in-right 0.4s cubic-bezier(.22,1,.36,1); }
+.sheet-content[data-side='right'][data-state='closed'] { animation: sheet-out-right 0.24s ease-in forwards; }
+.sheet-content[data-side='left'][data-state='open'] { animation: sheet-in-left 0.4s cubic-bezier(.22,1,.36,1); }
+.sheet-content[data-side='left'][data-state='closed'] { animation: sheet-out-left 0.24s ease-in forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-overlay[data-state],
+  .sheet-content[data-state] { animation-duration: 0.01ms; }
+}
+
+/* ===== Kartu proyek: sorotan & tepi yang mengikuti kursor ===== */
+.project-card { --mx: 50%; --my: 0%; }
+.project-card__spot {
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(140, 198, 63, 0.13), transparent 60%);
+}
+.project-card__edge {
+  padding: 1px;
+  background: radial-gradient(300px circle at var(--mx) var(--my), rgba(166, 219, 90, 0.9), transparent 55%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+@media (hover: none) {
+  .project-card__spot,
+  .project-card__edge { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover { transform: none; }
+}
+
+/* Strip yang bisa digeser tanpa scrollbar terlihat (filter chip di HP) */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
