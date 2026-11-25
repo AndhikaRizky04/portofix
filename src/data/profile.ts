@@ -38,8 +38,8 @@ export const profile: Profile = {
   },
   kontak: {
     email: 'andhikawahyu65@gmail.com',
-    whatsapp: '0895341294500',
-    linkedin: 'https://linkedin.com/in/dhika-rizky-99152b287',
+    whatsapp: '6285290459396',
+    linkedin: 'https://linkedin.com/in/andhikarizkynw',
     github: 'https://github.com/AndhikaRizky04',
     lokasi: 'Kaliwungu, Kudus',
     koordinat: "KALIWUNGU, KUDUS"

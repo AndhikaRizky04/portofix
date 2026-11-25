@@ -1,82 +1,79 @@
 import React from 'react';
-import SpotlightCard from '../reactbits/SpotlightCard';
-import TechChip from '../ui/TechChip';
+import { FiExternalLink, FiGithub, FiBookOpen, FiArrowRight } from 'react-icons/fi';
 import TechnicalImage from '../ui/TechnicalImage';
+import TechChip from '../ui/TechChip';
 import type { Project } from '../../data/projects';
-import { FiExternalLink, FiGithub, FiBookOpen } from 'react-icons/fi';
 
 interface ProjectCardProps {
   project: Project;
+  wide?: boolean;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, wide = false }) => {
   const isStunting = project.id === 'stunting-prediction';
+  const primaryLink = project.demo || project.github || project.notebook;
 
   return (
-    <div
+    <article
       id={`project-card-${project.id}`}
-      className={`transition-all duration-300 scroll-mt-20 ${
-        project.unggulan ? 'lg:col-span-2' : ''
-      }`}
+      className="card-lift group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-transparent bg-mist scroll-mt-28"
     >
-      <SpotlightCard className="h-full flex flex-col justify-between p-5 border border-line bg-ink-700 hover:border-steel/50 transition-standard">
-        <div className="space-y-4">
-          {/* Image Surface */}
-          <div className="relative overflow-hidden border-hairline bg-ink-900 group rounded-[3px]">
-            {isStunting && (
-              <span className="absolute top-2.5 left-2.5 z-20 bg-alert text-bone font-mono text-[9px] font-bold tracking-widest px-2 py-0.5 rounded-[2px] border border-alert select-none animate-pulse">
-                DETEKSI DINI
-              </span>
-            )}
-            <TechnicalImage
-              src={project.gambar}
-              alt={project.nama}
-              className="w-full h-auto aspect-[16/10] object-cover transition-standard duration-400 group-hover:filter-none duotone-filter"
-              aspectRatio="aspect-[16/10]"
-            />
-            {/* Fine Blueprint Grids overlay */}
-            <div className="absolute inset-0 bg-grid-blueprint pointer-events-none opacity-20" />
-          </div>
-
-          {/* Heading and Category */}
-          <div className="space-y-1 select-none">
-            <div className="flex items-center justify-between gap-2">
-              <span className="label-mono text-steel text-[10px]">
-                {project.kategori}
-              </span>
-              <span className="label-mono text-mute text-[9px]">
-                {project.tahun}
-              </span>
-            </div>
-            <h3 className="font-display text-base md:text-lg text-bone tracking-tight uppercase">
-              {project.nama}
-            </h3>
-          </div>
-
-          {/* Description Paragraph */}
-          <p className="text-sm text-mute leading-relaxed font-sans">
-            {project.deskripsi}
-          </p>
+      <div className="flex items-start justify-between gap-3 p-5 pb-3">
+        <div className="space-y-1">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate">
+            {project.kategori} · {project.tahun}
+          </span>
+          <h3 className={`font-display leading-tight text-forest-900 ${wide ? 'text-xl md:text-2xl' : 'text-base'}`}>
+            {project.nama}
+          </h3>
+          {primaryLink && (
+            <a
+              href={primaryLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-lime hover:text-forest-700 transition-colors"
+            >
+              Detail <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          )}
         </div>
+        {isStunting && (
+          <span className="shrink-0 rounded-full bg-forest-900 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-lime">
+            Deteksi dini
+          </span>
+        )}
+      </div>
 
-        {/* Tech Chips and Actions Links */}
-        <div className="space-y-4 mt-6">
+      <div className="relative mx-3 overflow-hidden rounded-2xl bg-white">
+        <TechnicalImage
+          src={project.gambar}
+          alt={project.nama}
+          className={`w-full object-cover duotone-filter transition-transform duration-700 group-hover:scale-[1.06] ${
+            wide ? 'aspect-[16/9]' : 'aspect-[4/3]'
+          }`}
+          aspectRatio={wide ? 'aspect-[16/9]' : 'aspect-[4/3]'}
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between gap-4 p-5 pt-4">
+        <p className={`text-sm leading-relaxed text-slate ${wide ? '' : 'line-clamp-3'}`}>{project.deskripsi}</p>
+
+        <div className="space-y-4">
           <div className="flex flex-wrap gap-1.5">
-            {project.stack.map((s, idx) => (
-              <TechChip key={`chip-${idx}`} tech={s} />
+            {project.stack.map((s) => (
+              <TechChip key={s} tech={s} />
             ))}
           </div>
 
-          <div className="flex items-center gap-4 pt-3 border-t border-line font-mono text-[10px] tracking-widest text-mute">
+          <div className="flex flex-wrap items-center gap-2 border-t border-rule pt-3">
             {project.demo && (
               <a
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:text-phosphor transition-colors duration-150"
+                className="inline-flex items-center gap-1.5 rounded-full bg-forest-900 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-lime hover:text-forest-950 transition-colors"
               >
-                <FiExternalLink size={12} />
-                <span>DEMO_SYS</span>
+                <FiExternalLink size={12} /> Demo
               </a>
             )}
             {project.github && (
@@ -84,10 +81,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:text-phosphor transition-colors duration-150"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-900 ring-1 ring-rule hover:ring-lime hover:text-forest-700 transition-colors"
               >
-                <FiGithub size={12} />
-                <span>GITHUB_SRC</span>
+                <FiGithub size={12} /> GitHub
               </a>
             )}
             {project.notebook && (
@@ -95,16 +91,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 href={project.notebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-steel hover:text-phosphor transition-colors duration-150 font-semibold"
+                className="inline-flex items-center gap-1.5 rounded-full bg-lime-100 px-3 py-1.5 text-[11px] font-semibold text-forest-800 hover:bg-lime transition-colors"
               >
-                <FiBookOpen size={12} />
-                <span>JUPYTER_NB</span>
+                <FiBookOpen size={12} /> Notebook
               </a>
             )}
           </div>
         </div>
-      </SpotlightCard>
-    </div>
+      </div>
+    </article>
   );
 };
+
 export default ProjectCard;

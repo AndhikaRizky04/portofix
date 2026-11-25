@@ -29,7 +29,9 @@ export const Documentation: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-ink-900 bg-grid-blueprint text-bone p-6 md:p-12">
+    <div className="relative min-h-screen bg-ink-900 text-bone p-6 md:p-12">
+      {/* Pola doodle lime tipis */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 bg-doodle-lime opacity-[0.05]" />
       {/* Back Button (Instrument Rail Corner style) */}
       <div className="fixed top-6 left-6 z-40 select-none">
         <Link 
@@ -41,7 +43,7 @@ export const Documentation: React.FC = () => {
         </Link>
       </div>
 
-      <div className="max-w-[1100px] mx-auto pt-20 space-y-10">
+      <div className="relative z-10 max-w-[1100px] mx-auto pt-20 space-y-10">
         {/* Header Metadata */}
         <div className="border-hairline-b pb-4 select-none">
           <div className="label-mono text-steel mb-2">
